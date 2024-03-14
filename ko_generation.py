@@ -1,5 +1,6 @@
 import os
 from langchain_community.document_loaders import DirectoryLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -63,6 +64,19 @@ class Generator:
             loader = DirectoryLoader(self.input_dir, glob="**/*.md", silent_errors=True)
         else:
             loader = DirectoryLoader(self.input_dir, glob="**/*.md")
+        docs = loader.load()
+        print(f"You have {len(docs)} documents.")
+        self.docs = docs
+
+    def read_pdf(self, ignore=False):
+        """
+        Load PDF files in input directory
+        :param ignore: If True will ignore errors when loading files
+        """
+        if ignore:
+            loader = DirectoryLoader(self.input_dir, glob="**/*.pdf", silent_errors=True)
+        else:
+            loader = DirectoryLoader(self.input_dir, glob="**/*.pdf")
         docs = loader.load()
         print(f"You have {len(docs)} documents.")
         self.docs = docs
@@ -156,7 +170,7 @@ class Generator:
         """
         :param name: name of existing db
         """
-        self.db = FAISS.load_local(name, self.embeddings)
+        self.db = FAISS.load_local(name, self.embeddings, allow_dangerous_deserialization=True)
 
     def create_ko(self, template, topic):
         """

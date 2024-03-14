@@ -4,11 +4,14 @@ import sys
 
 
 def drive(generator, file_type, db_name, db_save_name):
-    if file_type not in ['all', 'md', 'txt', 'html']:
-        raise ValueError("File Type not supported. File type must be one of ['all', 'md', 'txt', 'html']")
+    if file_type not in ['all', 'md', 'pdf', 'txt', 'html']:
+        raise ValueError("File Type not supported. File type must be one of ['all', 'md', 'pdf', 'txt', 'html']")
 
     elif file_type == 'md':
         generator.read_md()
+
+    elif file_type == 'pdf':
+        generator.read_pdf()
 
     elif file_type == 'txt':
         generator.read_txt()
