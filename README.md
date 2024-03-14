@@ -43,7 +43,9 @@ generation.
 
 Run through command line using:
 
-`python populate_db.py <name of input directory> <file type> <optional: name of existing db>`
+```
+python populate_db.py <name of input directory> <file type> <optional: name of existing db>
+```
 
 Arguments:
 - name of input directory - name of directory holding the files you want to load
@@ -63,10 +65,14 @@ the other 2 arguments, and you will be asked to input how to save the db as.
 
 Once you have an existing vector store, you can use this script to generate a markdown KO on a given subject. The KO
 will be saved as a markdown file in a directory called **knowledge_objects**.
+First, create `inputs` directory and then generate the KO.
 
 Run through command line using:
 
-`python populate_db.py <db name> <subject of KO>`
+```
+mkdir inputs
+python generate_ko.py <db name> <subject of KO>
+```
 
 Arguments:
 
