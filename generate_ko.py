@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from ko_generation import Generator
 import sys
+import os
 
 if __name__ == "__main__":
     load_dotenv()
@@ -22,9 +23,18 @@ if __name__ == "__main__":
     - References
     """
 
+    if not os.path.exists('knowledge_objects'):
+        os.mkdir('knowledge_objects')
+
     db_name = sys.argv[1]
     topic = sys.argv[2]
 
-    generator = Generator('inputs', 'knowledge_objects')
-    generator.load_db(db_name)
+    generator = Generator('knowledge_objects', 'knowledge_objects')
+
+    if len(sys.argv) == 4 and sys.argv[3].lower() == 'true':
+        generator.load_db(db_name, allow_deserialization=True)
+
+    else:
+        generator.load_db(db_name)
+
     generator.create_ko(template=template, topic=topic)
