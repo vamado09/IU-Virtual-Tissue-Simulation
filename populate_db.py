@@ -35,8 +35,8 @@ if __name__ == "__main__":
     input_dir = sys.argv[1]
     file = sys.argv[2]
     if len(sys.argv) == 4:
-        db = sys.argv[4]
-        db_save = sys.argv[4]
+        db = sys.argv[3]
+        db_save = sys.argv[3]
     else:
         db = None
         db_save = input("How would you like to save the vector store as? ")

@@ -11,7 +11,7 @@ import requests
 
 
 class Generator:
-    def __init__(self, input_dir, output_dir, model=None):
+    def __init__(self, input_dir: str, output_dir: str, model=None):
         if not os.path.exists(input_dir) or not os.path.isdir(input_dir):
             raise FileNotFoundError(f"The path '{input_dir}' does not exist or is not a directory.")
 
@@ -55,7 +55,7 @@ class Generator:
         else:
             print(f"Failed to fetch HTML content from {url}")
 
-    def read_md(self, ignore=False):
+    def read_md(self, ignore: bool = False):
         """
         Load markdown files in input directory
         :param ignore: If True will ignore errors when loading files
@@ -68,7 +68,7 @@ class Generator:
         print(f"You have {len(docs)} documents.")
         self.docs = docs
 
-    def read_pdf(self, ignore=False):
+    def read_pdf(self, ignore: bool = False):
         """
         Load PDF files in input directory
         :param ignore: If True will ignore errors when loading files
@@ -81,7 +81,7 @@ class Generator:
         print(f"You have {len(docs)} documents.")
         self.docs = docs
 
-    def read_txt(self, ignore=False):
+    def read_txt(self, ignore: bool = False):
         """
         Load txt files in input directory
         :param ignore: If True will ignore errors when loading files
@@ -94,7 +94,7 @@ class Generator:
         print(f"You have {len(docs)} documents.")
         self.docs = docs
 
-    def read_html(self, ignore=False):
+    def read_html(self, ignore: bool = False):
         """
         Load HTML files in input directory
         :param ignore: If True will ignore errors when loading files
@@ -107,7 +107,7 @@ class Generator:
         print(f"You have {len(docs)} documents.")
         self.docs = docs
 
-    def read_all(self, ignore=False):
+    def read_all(self, ignore: bool = False):
         """
         Load all file types in input directory
         :param ignore: If True will ignore errors when loading files
@@ -166,11 +166,15 @@ class Generator:
         """
         self.db.save_local(name)
 
-    def load_db(self, name: str):
+    def load_db(self, name: str, allow_deserialization: bool = False):
         """
         :param name: name of existing db
+        :param allow_deserialization: whether to allow unpickling of files. Default is False
         """
-        self.db = FAISS.load_local(name, self.embeddings, allow_dangerous_deserialization=True)
+        if allow_deserialization:
+            self.db = FAISS.load_local(name, self.embeddings, allow_dangerous_deserialization=True)
+        else:
+            self.db = FAISS.load_local(name, self.embeddings)
 
     def create_ko(self, template, topic):
         """

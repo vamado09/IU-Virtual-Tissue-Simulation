@@ -65,16 +65,15 @@ the other 2 arguments, and you will be asked to input how to save the db as.
 
 Once you have an existing vector store, you can use this script to generate a markdown KO on a given subject. The KO
 will be saved as a markdown file in a directory called **knowledge_objects**.
-First, create `inputs` directory and then generate the KO.
 
 Run through command line using:
 
 ```
-mkdir inputs
-python generate_ko.py <db name> <subject of KO>
+python generate_ko.py <db name> <subject of KO> <optional: allow deserialization>
 ```
 
 Arguments:
 
 - db name: name of your vector store
 - subject of KO: topic for KO (e.g., Morpheus)
+- allow deserialization: if set to true, then allows for pickle deserialization when loading db
