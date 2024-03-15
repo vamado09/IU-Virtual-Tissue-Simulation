@@ -69,10 +69,11 @@ will be saved as a markdown file in a directory called **knowledge_objects**.
 Run through command line using:
 
 ```
-python generate_ko.py <db name> <subject of KO>
+python generate_ko.py <db name> <subject of KO> <optional: allow deserialization>
 ```
 
 Arguments:
 
 - db name: name of your vector store
 - subject of KO: topic for KO (e.g., Morpheus)
+- allow deserialization: if set to true, then allows for pickle deserialization when loading db
