@@ -111,7 +111,12 @@ class Generator:
         # Transforming the HTML to text
         html2text = Html2TextTransformer()
         docs_transformed = html2text.transform_documents(docs)
-        self.docs = docs_transformed
+
+        # Merging the doc back into the docs in the class level
+        if self.docs:
+            self.docs += docs_transformed
+        else:
+            self.docs = docs_transformed
 
 
     def read_all(self, ignore: bool = False):
