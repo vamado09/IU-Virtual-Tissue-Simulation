@@ -1,6 +1,8 @@
 import os
 from langchain_community.document_loaders import DirectoryLoader
 from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import AsyncHtmlLoader
+from langchain_community.document_transformers import Html2TextTransformer
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -31,29 +33,6 @@ class Generator:
                 temperature=0,
                 model_name="gpt-3.5-turbo"
             )
-
-    def scrape(self, url: str, file_name: str):
-        """
-        Function to scrape website and write HTML content to an HTML file.
-        File will be saved in the object's input directory.
-        :param url: website to scrape
-        :param file_name: name of file HTML will be saved as in the input directory
-        """
-        response = requests.get(url)
-
-        # Check if the request was successful
-        if response.status_code == 200:
-            # Get the HTML content
-            html_content = response.text
-
-            file_path = os.path.join(self.input_dir, f"{file_name}.html")
-
-            # Save the HTML content to a file
-            with open(file_path, 'w', encoding='utf-8') as f:
-                f.write(html_content)
-            print(f"HTML content saved in {file_path}")
-        else:
-            print(f"Failed to fetch HTML content from {url}")
 
     def read_md(self, ignore: bool = False):
         """
@@ -106,6 +85,39 @@ class Generator:
             self.docs += docs
         else:
             self.docs = docs
+
+    def read_urls(self, ignore: bool = False):
+        """
+        Load url files in input directory and scrapes text from the remote URLs
+        :param ignore: If True will ignore errors when loading files
+        """
+        if ignore:
+            loader = DirectoryLoader(self.input_dir, glob="**/*.url", silent_errors=True)
+        else:
+            loader = DirectoryLoader(self.input_dir, glob="**/*.url")
+        docs = loader.load()
+        print(f"You have {len(docs)} documents.")
+
+        # Creating a list of lists of the urls (just in case there is multiple *.url files)
+        urls_list = [doc.page_content.split("\n\n") for doc in docs if doc.page_content is not None]
+
+        # Flattening the list of urls
+        urls = [item for sublist in urls_list for item in sublist]
+
+        # Web scrapping requested URLs
+        loader = AsyncHtmlLoader(urls)
+        docs = loader.load()
+
+        # Transforming the HTML to text
+        html2text = Html2TextTransformer()
+        docs_transformed = html2text.transform_documents(docs)
+
+        # Merging the doc back into the docs in the class level
+        if self.docs:
+            self.docs += docs_transformed
+        else:
+            self.docs = docs_transformed
+
 
     def read_all(self, ignore: bool = False):
         """

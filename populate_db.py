@@ -1,20 +1,9 @@
 from dotenv import load_dotenv
 from ko_generation import Generator
 import sys
-import os
-import requests
 
 
 def drive(generator, db_name, db_save_name):
-
-    # scrape websites in urls.txt
-    if os.path.exists('urls.txt'):
-        with open('urls.txt', 'r') as f:
-            for url in f:
-                try:
-                    gen.scrape(url, file_name=url[:10])
-                except requests.exceptions.MissingSchema:
-                    print(f'Add schema (http or https) to {url}')
 
     generator.read_all(ignore=True)
 
