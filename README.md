@@ -33,6 +33,50 @@ load_dotenv()
 
 ## Scripts
 
+### main.py
+This is the script encompassing the entire workflow for generating knowledge objects (
+using the generator class from ko_generation.py); you can load source documents to create a vector embeddings db,
+load/save a vector embeddings db, and finally generate a knowledge object markdown file.
+
+#### Requirements
+Note that if you wish to scrape urls, you need a .url file in the same project directory with urls listed line by line.
+In addition, a template.txt file in which you list the sections of your knowledge object is also necessary.
+
+#### How to run
+To run this script, use the following command in your command line - arguments are explained further below:
+
+```
+python main.py <input_dir> <topic> <loading> <deserialize> <optional: existing_db>
+```
+
+Examples:
+```
+python main.py docs Morpheus true false
+```
+
+
+Note that we can also have multiple subjects, separated by a single comma (no spaces):
+```
+python main.py docs Morpheus,Chaste true false
+```
+
+or in the case your subject contains multiple words
+
+```
+python main.py docs "Morpheus,Tissue Forge" true false
+```
+
+
+##### Arguments:
+1. input_dir: name of input directory that stores the files you wish to load
+2. topic: subject of your knowledge object
+3. loading: whether you want to load new documents - True or False
+4. deserialize: whether you want to allow for deserialization when loading a db - True or False
+5. existing_db: Optional - the name of your existing embeddings db, if any
+
+- Tip: if not loading any new documents, use "knowledge_objects" as your input directory
+
+
 ### ko_generation.py 
 This contains the Generator class used for processes in loading input files, create vector embeddings, 
 and create Knowledge Objects (KOs).

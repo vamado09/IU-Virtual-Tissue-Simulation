@@ -1,26 +1,22 @@
 from dotenv import load_dotenv
 from ko_generation import Generator
 import sys
+import os
+import requests
 
 
-def drive(generator, file_type, db_name, db_save_name):
-    if file_type not in ['all', 'md', 'pdf', 'txt', 'html']:
-        raise ValueError("File Type not supported. File type must be one of ['all', 'md', 'pdf', 'txt', 'html']")
+def drive(generator, db_name, db_save_name):
 
-    elif file_type == 'md':
-        generator.read_md()
+    # scrape websites in urls.txt
+    if os.path.exists('urls.txt'):
+        with open('urls.txt', 'r') as f:
+            for url in f:
+                try:
+                    gen.scrape(url, file_name=url[:10])
+                except requests.exceptions.MissingSchema:
+                    print(f'Add schema (http or https) to {url}')
 
-    elif file_type == 'pdf':
-        generator.read_pdf()
-
-    elif file_type == 'txt':
-        generator.read_txt()
-
-    elif file_type == 'html':
-        generator.read_md()
-
-    else:
-        generator.read_all()
+    generator.read_all(ignore=True)
 
     generator.chunk_docs(chunk_size=1000, overlap=200)
 
@@ -33,10 +29,9 @@ if __name__ == "__main__":
     load_dotenv()
 
     input_dir = sys.argv[1]
-    file = sys.argv[2]
-    if len(sys.argv) == 4:
-        db = sys.argv[3]
-        db_save = sys.argv[3]
+    if len(sys.argv) == 3:
+        db = sys.argv[2]
+        db_save = sys.argv[2]
     else:
         db = None
         db_save = input("How would you like to save the vector store as? ")
@@ -45,7 +40,6 @@ if __name__ == "__main__":
 
     drive(
         generator=gen,
-        file_type=file,
         db_name=db,
         db_save_name=db_save
     )

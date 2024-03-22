@@ -60,62 +60,59 @@ class Generator:
         Load markdown files in input directory
         :param ignore: If True will ignore errors when loading files
         """
-        if ignore:
-            loader = DirectoryLoader(self.input_dir, glob="**/*.md", silent_errors=True)
-        else:
-            loader = DirectoryLoader(self.input_dir, glob="**/*.md")
+        loader = DirectoryLoader(self.input_dir, glob="**/*.md", silent_errors=ignore)
         docs = loader.load()
         print(f"You have {len(docs)} documents.")
-        self.docs = docs
+        if self.docs:
+            self.docs += docs
+        else:
+            self.docs = docs
 
     def read_pdf(self, ignore: bool = False):
         """
         Load PDF files in input directory
         :param ignore: If True will ignore errors when loading files
         """
-        if ignore:
-            loader = DirectoryLoader(self.input_dir, glob="**/*.pdf", silent_errors=True)
-        else:
-            loader = DirectoryLoader(self.input_dir, glob="**/*.pdf")
+        loader = DirectoryLoader(self.input_dir, glob="**/*.pdf", silent_errors=ignore)
         docs = loader.load()
         print(f"You have {len(docs)} documents.")
-        self.docs = docs
+        if self.docs:
+            self.docs += docs
+        else:
+            self.docs = docs
 
     def read_txt(self, ignore: bool = False):
         """
         Load txt files in input directory
         :param ignore: If True will ignore errors when loading files
         """
-        if ignore:
-            loader = DirectoryLoader(self.input_dir, glob="**/*.txt", silent_errors=True)
-        else:
-            loader = DirectoryLoader(self.input_dir, glob="**/*.txt")
+        loader = DirectoryLoader(self.input_dir, glob="**/*.txt", silent_errors=ignore)
         docs = loader.load()
         print(f"You have {len(docs)} documents.")
-        self.docs = docs
+        if self.docs:
+            self.docs += docs
+        else:
+            self.docs = docs
 
     def read_html(self, ignore: bool = False):
         """
         Load HTML files in input directory
         :param ignore: If True will ignore errors when loading files
         """
-        if ignore:
-            loader = DirectoryLoader(self.input_dir, glob="**/*.html", silent_errors=True)
-        else:
-            loader = DirectoryLoader(self.input_dir, glob="**/*.html")
+        loader = DirectoryLoader(self.input_dir, glob="**/*.html", silent_errors=ignore)
         docs = loader.load()
         print(f"You have {len(docs)} documents.")
-        self.docs = docs
+        if self.docs:
+            self.docs += docs
+        else:
+            self.docs = docs
 
     def read_all(self, ignore: bool = False):
         """
         Load all file types in input directory
         :param ignore: If True will ignore errors when loading files
         """
-        if ignore:
-            loader = DirectoryLoader(self.input_dir, silent_errors=True)
-        else:
-            loader = DirectoryLoader(self.input_dir)
+        loader = DirectoryLoader(self.input_dir, silent_errors=ignore)
         docs = loader.load()
         print(f"You have {len(docs)} documents.")
         self.docs = docs
@@ -140,16 +137,17 @@ class Generator:
             )
         self.docs = text_splitter.split_documents(self.docs)
 
-    def ingest_db(self, db: str = None):
+    def ingest_db(self, db: str = None, deserialization: bool = False):
         """
         Ingest vector store with vector embeddings from loaded docs.
         :param db: Name of existing db if any, otherwise defaults to None
+        :param deserialization: Whether to deserialization of files. Default is False
         """
         if not db:
             self.db = FAISS.from_documents(self.docs, self.embeddings)
         else:
             db_temp = FAISS.from_documents(self.docs, self.embeddings)
-            self.load_db(db)
+            self.load_db(db, allow_deserialization=deserialization)
             self.db.merge_from(db_temp)
 
     def query_vs(self, query: str):
@@ -169,7 +167,7 @@ class Generator:
     def load_db(self, name: str, allow_deserialization: bool = False):
         """
         :param name: name of existing db
-        :param allow_deserialization: whether to allow unpickling of files. Default is False
+        :param allow_deserialization: whether to allow deserialization of files. Default is False
         """
         if allow_deserialization:
             self.db = FAISS.load_local(name, self.embeddings, allow_dangerous_deserialization=True)
@@ -178,7 +176,7 @@ class Generator:
 
     def create_ko(self, template, topic):
         """
-        Function to generate KO .md files
+        Function to generate text
         :param template: Prompt template used for generating output
         :param topic: The topic of the KO (e.g., Morpheus)
         """
@@ -193,7 +191,4 @@ class Generator:
 
         result = chain.invoke(topic)
 
-        output_path = os.path.join(self.output_dir, f"{topic}.md")
-
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(result)
+        return result
