@@ -1,6 +1,5 @@
 import os
 from langchain_community.document_loaders import DirectoryLoader
-from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_transformers import Html2TextTransformer
 from langchain_community.vectorstores import FAISS
@@ -9,7 +8,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
-import requests
 
 
 class Generator:
@@ -86,23 +84,14 @@ class Generator:
         else:
             self.docs = docs
 
-    def read_urls(self, ignore: bool = False):
+    def read_urls(self):
         """
         Load url files in input directory and scrapes text from the remote URLs
-        :param ignore: If True will ignore errors when loading files
         """
-        if ignore:
-            loader = DirectoryLoader(self.input_dir, glob="**/*.url", silent_errors=True)
-        else:
-            loader = DirectoryLoader(self.input_dir, glob="**/*.url")
-        docs = loader.load()
-        print(f"You have {len(docs)} documents.")
 
-        # Creating a list of lists of the urls (just in case there is multiple *.url files)
-        urls_list = [doc.page_content.split("\n\n") for doc in docs if doc.page_content is not None]
-
-        # Flattening the list of urls
-        urls = [item for sublist in urls_list for item in sublist]
+        with open('urls.txt', 'r') as u:
+            urls = [url.strip() for url in u]
+            u.close()
 
         # Web scrapping requested URLs
         loader = AsyncHtmlLoader(urls)
@@ -117,7 +106,6 @@ class Generator:
             self.docs += docs_transformed
         else:
             self.docs = docs_transformed
-
 
     def read_all(self, ignore: bool = False):
         """

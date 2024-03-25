@@ -23,7 +23,7 @@ def initiate_gen(inputs_dir: str, load_docs: bool, deserialization: bool, db_nam
         gen.read_all(ignore=True)
 
         # scrape websites in .url file and load them
-        gen.read_urls(ignore=True)
+        gen.read_urls()
 
         # raise error
         if len(gen.docs) == 0:
@@ -72,24 +72,24 @@ if __name__ == "__main__":
         existing_db = None
 
     if not os.path.exists('template.txt'):
-        raise FileNotFoundError(f"The path '{input_dir}' does not contain template.txt file.")
+        raise FileNotFoundError(f"The path does not contain template.txt file.")
 
     generator = initiate_gen(input_dir, load_docs=loading, deserialization=deserialize, db_name=existing_db)
 
     with open('template.txt', 'r') as t:
-        sections = [section for section in t]
+        sections = [section.strip() for section in t]
         t.close()
 
     for topic in topics:
         results = []
         for section in sections:
-            template = ("You are an expert in {topic}, and you are writing the section " + section +
+            template = ("You are an expert in {topic}, and you are writing the section " + f"'{section}'" +
                         " of a website on this subject. Based on the following context: {context} "
                         "\nWrite the provided section in markdown format. Include the section title as header 2")
 
             results.append(generator.create_ko(template, topic))
 
         output_path = os.path.join(generator.output_dir, f"{topic}.md")
-        result = ' '.join(results)
+        result = '\n\n'.join(results)
         with open(output_path, 'w', encoding='utf-8') as out_file:
             out_file.write(result)
