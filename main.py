@@ -37,7 +37,7 @@ def initiate_gen(inputs_dir: str, load_docs: bool, deserialization: bool, db_nam
         else:
             gen.ingest_db()
 
-        save_name = input('How would you like to save the vector DB as? If not saving, simply press Enter')
+        save_name = input('How would you like to save the vector DB as? If not saving, simply press Enter ')
         if len(save_name) > 0:
             gen.save_db(save_name)
 

@@ -1,76 +1,84 @@
-## Objective
-The main goal is to create a Knowledge Object Generator class to simplify and streamline the process of generating
-knowledge objects for the purpose of our searchable encyclopedia; this class would incorporate RAG and LLMs to
-automate the creation of markdown knowledge object files which can be easily integrated with our web application.
+## Generating Knowledge Objects Using RAG with LangChain
+The main goal of this project is to create knowledge objects based on the source documents and/or a list of URLs using Retrieval-Augmented Generation (RAG) with LangChain.
 
-## Getting started
-
-1. First install the required packages
-
-    ```pip install -r requirements.txt```
+The Generator class is based on the [LangChain's RAG documentation](https://python.langchain.com/docs/expression_language/cookbook/retrieval) and it streamlines and automates the process of generating
+knowledge objects for the purpose of our searchable encyclopedia; the generated knowledge object files are in the markdown format which can be easily integrated with our web application.
 
 
-2. Create a .env file in the same directory
+
+## Requirements
+1. OpenAI API key: [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys). OpenAI offers a promotional credit which expires after about 2 months. If this is the case, an account with at least Tier 1 might be needed: [https://platform.openai.com/account/limits](https://platform.openai.com/account/limits)
+
+2. Python 3 installed
 
 
-3. In .env store your OpenAI API key as OPENAI_API_KEY
 
-    `OPENAI_API_KEY=<your API key>`
+## Usage
 
+1. First install the required packages:
 
-4. In the same directory, create/edit 'template.txt' which contains your knowledge object template. 
-An example template is provided
+    ```
+    pip install -r requirements.txt
+    ```
 
-
-5. If wanting to scrape urls, create a 'urls.txt' file which lists the urls, line by line
-
-
-6. Create a subdirectory containing the source files you want to load. Currently, supports pdf, txt, html, and md
+2. Create a `.env` file in the same directory:
 
 
-7. Run main.py as specified below
+3. In `.env` store your OpenAI API key as `OPENAI_API_KEY`:
 
-## Scripts
-### main.py
-This is the script encompassing the entire workflow for generating knowledge objects (
-using the generator class from ko_generation.py); you can load source documents to create a vector embeddings db,
-load/save a vector embeddings db, and finally generate a knowledge object markdown file.
+    ```
+    OPENAI_API_KEY=<your API key>
+    ```
 
-#### How to run
-To run this script, use the following command in your command line - arguments are explained further below:
 
+4. In the same directory, create/edit `template.txt` which contains your knowledge object template. 
+An example template file is provided.
+
+
+5. If wanting to scrape URLs, create a `urls.txt` file which lists the URLs, line by line.
+
+
+6. Create a subdirectory containing the source files you want to load. Currently, pdf, txt, html, and md are supported.
+
+
+7. Run `main.py` as specified:
 ```
 python main.py <input_dir> <topic> <loading> <deserialize> <optional: existing_db>
 ```
-
 #### Examples:
 ```
 python main.py docs Morpheus true false
 ```
-
-
 Note that we can also have multiple subjects, separated by a single comma (no spaces):
 ```
 python main.py docs Morpheus,Chaste true false
 ```
-
 or in the case your subject contains multiple words
-
 ```
 python main.py docs "Morpheus,Tissue Forge" true false
 ```
-
-
-##### Arguments:
-1. input_dir: name of input directory that stores the files you wish to load
-2. topic: subject of your knowledge object
-3. loading: whether you want to load new documents - True or False
-4. deserialize: whether you want to allow for deserialization when loading a db - True or False
-5. existing_db: Optional - the name of your existing embeddings db, if any
-
+#### Arguments:
+  1. input_dir: name of input directory that stores the files you wish to load
+  2. topic: subject of your knowledge object
+  3. loading: whether you want to load new documents - True or False
+  4. deserialize: whether you want to allow for deserialization when loading a db - True or False
+  5. existing_db: Optional - the name of your existing embeddings db, if any
 - Tip: if not loading any new documents, use "knowledge_objects" as your input directory
+
+
+
+## Scripts
+### main.py
+This is the script encompassing the entire workflow for generating knowledge objects (using the Generator class from ko_generation.py); you can load source documents to create a vector embeddings db,
+load/save a vector embeddings db, and finally generate a knowledge object markdown file.
 
 
 ### ko_generation.py 
 This contains the Generator class used for processes in loading input files, creating vector embeddings, 
 and creating Knowledge Objects (KOs).
+
+
+## Contributors
+- [@dani-dr06](https://github.com/dani-dr06)
+- [@vamado09](https://github.com/vamado09)
+- [@martinbreth](https://github.com/martinbreth)
