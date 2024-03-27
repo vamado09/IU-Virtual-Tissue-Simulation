@@ -22,8 +22,9 @@ def initiate_gen(inputs_dir: str, load_docs: bool, deserialization: bool, db_nam
         # load all supported input documents
         gen.read_all(ignore=True)
 
-        # scrape websites in .url file and load them
-        gen.read_urls()
+        # scrape websites in url file and load them
+        if os.path.exists('urls.txt'):
+            gen.read_urls()
 
         # raise error
         if len(gen.docs) == 0:
