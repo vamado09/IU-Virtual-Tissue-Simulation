@@ -7,9 +7,9 @@ knowledge objects for the purpose of our searchable encyclopedia; the generated 
 
 
 ## Requirements
-1. OpenAI API key: [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys). OpenAI offers a promotional credit which expires after about 2 months. If this is the case, an account with at least Tier 1 might be needed: [https://platform.openai.com/account/limits](https://platform.openai.com/account/limits).
+1. OpenAI API key: [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys). OpenAI offers a promotional credit which expires after about 2 months. If this is the case, an account with at least Tier 1 might be needed: [https://platform.openai.com/account/limits](https://platform.openai.com/account/limits)
 
-2. Ensure you have Python 3 installed.
+2. Python 3 installed
 
 
 
