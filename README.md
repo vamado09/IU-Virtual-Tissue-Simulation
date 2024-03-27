@@ -1,4 +1,4 @@
-## RAG with LangChain
+## Generating Knowledge Objects Using RAG with LangChain
 The main goal of this project is to create knowledge objects based on the source documents and/or a list of URLs using Retrieval-Augmented Generation (RAG) with LangChain.
 
 The Generator class is based on the [LangChain's RAG documentation](https://python.langchain.com/docs/expression_language/cookbook/retrieval) and it streamlines and automates the process of generating
