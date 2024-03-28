@@ -69,11 +69,11 @@ python main.py docs "Morpheus,Tissue Forge" true false
 
 ## Scripts
 ### main.py
-This is the script encompassing the entire workflow for generating knowledge objects (using the Generator class from ko_generation.py); you can load source documents to create a vector embeddings db,
+This is the script encompassing the entire workflow for generating knowledge objects (using the Generator class from `ko_generator.py`); you can load source documents to create a vector embeddings db,
 load/save a vector embeddings db, and finally generate a knowledge object markdown file.
 
 
-### ko_generation.py 
+### ko_generator.py 
 This contains the Generator class used for processes in loading input files, creating vector embeddings, 
 and creating Knowledge Objects (KOs).
 

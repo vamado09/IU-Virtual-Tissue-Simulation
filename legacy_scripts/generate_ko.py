@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from ko_generation import Generator
+from ..ko_generator import Generator
 import sys
 import os
 
